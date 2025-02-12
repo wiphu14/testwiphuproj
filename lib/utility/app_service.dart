@@ -20,15 +20,38 @@ import 'package:path/path.dart';
 class AppService {
   AppController appController = Get.put(AppController());
 
+  Future<List<UserModel>> readAllProphet() async {
+    List<UserModel> userModels = <UserModel>[];
+
+    var result = await FirebaseFirestore.instance
+        .collection('user')
+        .where('user', isEqualTo: false)
+        .get();
+
+        if (result.docs.isNotEmpty) {
+          for (var element in result.docs) {
+
+            UserModel model =UserModel.fromMap(element.data());
+
+            userModels.add(model);
+            
+          }
+        }
+
+    return userModels;
+  }
+
   Future<void> processUpdateProfile(
       {required Map<String, dynamic> mapUserModel}) async {
     await FirebaseFirestore.instance
         .collection('user')
         .doc(appController.currentUserModels.last.uid)
         .update(mapUserModel)
-        .whenComplete(() {
-          findCurrentUserModel();
-        },);
+        .whenComplete(
+      () {
+        findCurrentUserModel();
+      },
+    );
   }
 
   Future<void> findCurrentUserModel() async {

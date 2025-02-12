@@ -12,6 +12,7 @@ class WidgetFrom extends StatelessWidget {
     this.validator,
     this.controller,
     this.onChanged,
+    this.radius,
   }) : super(key: key);
 
   final String? labelText;
@@ -22,7 +23,7 @@ class WidgetFrom extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextEditingController? controller;
   final Function(String)? onChanged;
-
+  final double? radius;
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -38,13 +39,13 @@ class WidgetFrom extends StatelessWidget {
           filled: true,
           fillColor: Theme.of(context).highlightColor,
           enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(radius ?? 30),
               borderSide: BorderSide(color: Theme.of(context).highlightColor)),
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(radius ?? 30),
               borderSide: BorderSide(color: Theme.of(context).highlightColor)),
           errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(radius ?? 30),
               borderSide: BorderSide(color: Theme.of(context).highlightColor)),
         ),
       ),

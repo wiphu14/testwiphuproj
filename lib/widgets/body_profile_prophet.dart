@@ -89,23 +89,27 @@ class _BodyProfileProphetState extends State<BodyProfileProphet> {
             Positioned(
               top: Get.height / 2 + 60 + 16,
               child: SizedBox(
-                width: Get.width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                width: Get.width,height: Get.height - (Get.height / 2 + 60 + 16),
+                child: ListView(
                   children: [
-                    SizedBox(
-                      width: Get.width * 0.75,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          displayName(),
-                          SizedBox(height: 16),
-                          displaySlogan(),
-                          SizedBox(height: 16),
-                          displayDescrip(),
-                          SizedBox(height: 16),
-                        ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: Get.width * 0.75,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              displayName(),
+                              SizedBox(height: 16),
+                              displaySlogan(),
+                              SizedBox(height: 16),
+                              displayDescrip(),
+                              SizedBox(height: 16),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -123,16 +127,18 @@ class _BodyProfileProphetState extends State<BodyProfileProphet> {
       children: [
         Obx(() => appController.currentUserModels.isEmpty
             ? SizedBox()
-            : Text(
-                appController.currentUserModels.last.description.isEmpty
-                    ? 'Non Description'
-                    : appController.currentUserModels.last.description,
-                style: AppConstant()
-                    .h2Style(fontWeight: FontWeight.normal, fontSize: 16))),
+            : SizedBox(width:  Get.width * 0.6,
+              child: Text(
+                  appController.currentUserModels.last.description.isEmpty
+                      ? 'Non Description'
+                      : appController.currentUserModels.last.description,
+                  style: AppConstant()
+                      .h2Style(fontWeight: FontWeight.normal, fontSize: 16)),
+            )),
         WidgetIconButton(
             iconData: Icons.edit,
             onPressed: () {
-              // dialogCallDescription();
+              dialogCallDescription();
             }),
       ],
     );
@@ -144,12 +150,14 @@ class _BodyProfileProphetState extends State<BodyProfileProphet> {
       children: [
         Obx(() => appController.currentUserModels.isEmpty
             ? SizedBox()
-            : Text(
-                appController.currentUserModels.last.slogan.isEmpty
-                    ? 'Non Slogan ?'
-                    : appController.currentUserModels.last.slogan,
-                style: AppConstant()
-                    .h2Style(fontWeight: FontWeight.normal, fontSize: 16))),
+            : SizedBox(width: Get.width * 0.6,
+              child: Text(
+                  appController.currentUserModels.last.slogan.isEmpty
+                      ? 'Non Slogan ?'
+                      : appController.currentUserModels.last.slogan,
+                  style: AppConstant()
+                      .h2Style(fontWeight: FontWeight.normal, fontSize: 16)),
+            )),
         WidgetIconButton(
             iconData: Icons.edit,
             onPressed: () {
