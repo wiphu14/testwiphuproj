@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:wiphuproj/models/skill_model.dart';
 import 'package:wiphuproj/utility/app_constant.dart';
 import 'package:wiphuproj/utility/app_controller.dart';
 import 'package:wiphuproj/utility/app_dialog.dart';
@@ -89,7 +91,8 @@ class _BodyProfileProphetState extends State<BodyProfileProphet> {
             Positioned(
               top: Get.height / 2 + 60 + 16,
               child: SizedBox(
-                width: Get.width,height: Get.height - (Get.height / 2 + 60 + 16),
+                width: Get.width,
+                height: Get.height - (Get.height / 2 + 60 + 16),
                 child: ListView(
                   children: [
                     Row(
@@ -100,6 +103,93 @@ class _BodyProfileProphetState extends State<BodyProfileProphet> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(height: 16),
+                              Row(
+                                children: [
+                                  Text('Skill',
+                                      style: AppConstant().h3Style(
+                                          fontWeight: FontWeight.bold)),
+                                  SizedBox(
+                                    width: 16,
+                                  ),
+                                  WidgetButton(
+                                      text: 'เลือกสกิว',
+                                      onPressed: () {
+                                        AppDialog().normalDialog(
+                                            title: Text('เลือกสกิว;'),
+                                            content: Text('list Skill'));
+                                      }),
+                                  SizedBox(
+                                    width: 16,
+                                  ),
+                                  WidgetButton(
+                                      text: 'กรอกสกิว',
+                                      type: GFButtonType.outline,
+                                      onPressed: () {
+                                        TextEditingController
+                                            textEditingController =
+                                            TextEditingController();
+
+                                        appController.display.value = false;
+
+                                        AppDialog().normalDialog(
+                                            title: Text('กรอกสกิว;'),
+                                            content: WidgetFrom(
+                                                onChanged: (p0) {
+                                                  if (p0.isEmpty) {
+                                                    appController
+                                                        .display.value = false;
+                                                  } else {
+                                                    appController
+                                                        .display.value = true;
+                                                  }
+                                                },
+                                                radius: 8,
+                                                controller:
+                                                    textEditingController,
+                                                hintText:
+                                                    'สกิวใหม่ต้องไม่ซ้ำสกิวเดิม'),
+                                            firstAction:
+                                                Obx(
+                                                    () =>
+                                                        appController
+                                                                .display.value
+                                                            ? WidgetButton(
+                                                                text: 'บันทึก',
+                                                                onPressed:
+                                                                    () async {
+                                                                  SkillModel skillModel = SkillModel(
+                                                                      nameSkill:
+                                                                          textEditingController
+                                                                              .text,
+                                                                      uidRecord: appController
+                                                                          .currentUserModels
+                                                                          .last
+                                                                          .uid,
+                                                                      timestamp:
+                                                                          Timestamp.fromDate(
+                                                                              DateTime.now()));
+                                                                  await FirebaseFirestore
+                                                                      .instance
+                                                                      .collection(
+                                                                          'skill')
+                                                                      .doc()
+                                                                      .set(skillModel
+                                                                          .toMap())
+                                                                      .whenComplete(
+                                                                        () {
+                                                                          Get.back();
+                                                                        },
+                                                                      );
+                                                                },
+                                                                type: GFButtonType
+                                                                    .outline2x,
+                                                              )
+                                                            : SizedBox()));
+                                      }),
+                                ],
+                              ),
+                              SizedBox(height: 16),
                               displayName(),
                               SizedBox(height: 16),
                               displaySlogan(),
@@ -127,14 +217,15 @@ class _BodyProfileProphetState extends State<BodyProfileProphet> {
       children: [
         Obx(() => appController.currentUserModels.isEmpty
             ? SizedBox()
-            : SizedBox(width:  Get.width * 0.6,
-              child: Text(
-                  appController.currentUserModels.last.description.isEmpty
-                      ? 'Non Description'
-                      : appController.currentUserModels.last.description,
-                  style: AppConstant()
-                      .h2Style(fontWeight: FontWeight.normal, fontSize: 16)),
-            )),
+            : SizedBox(
+                width: Get.width * 0.6,
+                child: Text(
+                    appController.currentUserModels.last.description.isEmpty
+                        ? 'Non Description'
+                        : appController.currentUserModels.last.description,
+                    style: AppConstant()
+                        .h2Style(fontWeight: FontWeight.normal, fontSize: 16)),
+              )),
         WidgetIconButton(
             iconData: Icons.edit,
             onPressed: () {
@@ -150,14 +241,15 @@ class _BodyProfileProphetState extends State<BodyProfileProphet> {
       children: [
         Obx(() => appController.currentUserModels.isEmpty
             ? SizedBox()
-            : SizedBox(width: Get.width * 0.6,
-              child: Text(
-                  appController.currentUserModels.last.slogan.isEmpty
-                      ? 'Non Slogan ?'
-                      : appController.currentUserModels.last.slogan,
-                  style: AppConstant()
-                      .h2Style(fontWeight: FontWeight.normal, fontSize: 16)),
-            )),
+            : SizedBox(
+                width: Get.width * 0.6,
+                child: Text(
+                    appController.currentUserModels.last.slogan.isEmpty
+                        ? 'Non Slogan ?'
+                        : appController.currentUserModels.last.slogan,
+                    style: AppConstant()
+                        .h2Style(fontWeight: FontWeight.normal, fontSize: 16)),
+              )),
         WidgetIconButton(
             iconData: Icons.edit,
             onPressed: () {
