@@ -170,10 +170,12 @@ class WidgetIconButton extends StatelessWidget {
     Key? key,
     required this.iconData,
     required this.onPressed,
+    this.size,
   }) : super(key: key);
 
   final IconData iconData;
   final Function() onPressed;
+  final double? size;
 
   @override
   Widget build(BuildContext context) {
@@ -182,6 +184,7 @@ class WidgetIconButton extends StatelessWidget {
       onPressed: onPressed,
       color: Theme.of(context).primaryColor,
       type: GFButtonType.transparent,
+      size: size ?? GFSize.MEDIUM,
     );
   }
 }

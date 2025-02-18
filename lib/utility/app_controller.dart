@@ -14,6 +14,8 @@ class AppController extends GetxController {
   RxList currentUserModels = <UserModel>[].obs;
 
   RxBool display = false.obs;
+
+  RxList chooseDateTime = <DateTime>[].obs;
   
   
 }

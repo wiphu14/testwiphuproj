@@ -1,15 +1,18 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class UserModel {
-  
   final String uid;
   final String displayName;
- final String phoneNumber;
- final bool? user;
- final String? slogan;
- final String? description;
- final String? urlImage;
+  final String phoneNumber;
+  final bool? user;
+  final String? slogan;
+  final String? description;
+  final String? urlImage;
+  final Timestamp? birthTimestamp;
+  final num score;
 
   UserModel({
     required this.uid,
@@ -19,8 +22,9 @@ class UserModel {
     this.slogan,
     this.description,
     this.urlImage,
+    this.birthTimestamp,
+    required this.score,
   });
-
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -31,6 +35,8 @@ class UserModel {
       'slogan': slogan,
       'description': description,
       'urlImage': urlImage,
+      'birthTimestamp': birthTimestamp,
+      'score': score,
     };
   }
 
@@ -43,10 +49,13 @@ class UserModel {
       slogan: (map['slogan'] ?? '') as String,
       description: (map['description'] ?? '') as String,
       urlImage: (map['urlImage'] ?? '') as String,
+      birthTimestamp: map['birthTimestamp'],
+      score: (map['score'] ?? 0) as num,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

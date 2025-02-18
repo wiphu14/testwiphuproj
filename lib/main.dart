@@ -8,6 +8,7 @@ import 'package:wiphuproj/models/user_model.dart';
 import 'package:wiphuproj/states/intro.dart';
 import 'package:wiphuproj/states/main_home_prophet.dart';
 import 'package:wiphuproj/states/main_home_user.dart';
+import 'package:wiphuproj/utility/app_constant.dart';
 
 List<GetPage<dynamic>>? getPages = [
   GetPage(name: '/intro', page: () => const Intro()),
@@ -55,8 +56,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      theme: ThemeData(useMaterial3: true),
+    return GetMaterialApp(debugShowCheckedModeBanner: false,
+      theme:
+          ThemeData(useMaterial3: true, colorSchemeSeed: AppConstant.mainColor),
       // home: const Intro(),
       getPages: getPages,
       initialRoute: initialRoute,

@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,9 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:wiphuproj/models/user_model.dart';
 import 'package:wiphuproj/states/otp_page.dart';
+import 'package:wiphuproj/utility/app_constant.dart';
 import 'package:wiphuproj/utility/app_controller.dart';
 import 'package:wiphuproj/utility/app_dialog.dart';
 import 'package:wiphuproj/widgets/widget_button.dart';
@@ -20,6 +23,22 @@ import 'package:path/path.dart';
 class AppService {
   AppController appController = Get.put(AppController());
 
+  String calculateAge() {
+    var age = DateTime.now().year -
+        appController.currentUserModels.last.birthTimestamp.toDate().year;
+
+    return '$age ปี';
+  }
+
+  String changeTimestampToSring({required Timestamp timestamp}) {
+    DateTime dateTime = timestamp.toDate();
+
+    DateFormat dateFormat = DateFormat('dd MMM yyyy');
+    String string = dateFormat.format(dateTime);
+
+    return string;
+  }
+
   Future<List<UserModel>> readAllProphet() async {
     List<UserModel> userModels = <UserModel>[];
 
@@ -28,15 +47,13 @@ class AppService {
         .where('user', isEqualTo: false)
         .get();
 
-        if (result.docs.isNotEmpty) {
-          for (var element in result.docs) {
+    if (result.docs.isNotEmpty) {
+      for (var element in result.docs) {
+        UserModel model = UserModel.fromMap(element.data());
 
-            UserModel model =UserModel.fromMap(element.data());
-
-            userModels.add(model);
-            
-          }
-        }
+        userModels.add(model);
+      }
+    }
 
     return userModels;
   }
@@ -163,7 +180,8 @@ class AppService {
                           uid: uid,
                           displayName: textEditingController.text,
                           phoneNumber: phoneNumber,
-                          user: user);
+                          user: user,
+                          score: AppConstant.fireScore);
 
                       await FirebaseFirestore.instance
                           .collection('user')
